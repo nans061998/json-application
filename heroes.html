@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Application</title>
+<!--    <link rel="stylesheet" href="style.css">-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+</head>
+
+<body>
+
+<header>
+
+</header>
+
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <input type="file" accept="application/json" onchange="showFile(event)">
+                <button>Сбросить</button>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+<script>
+    const header = document.querySelector('header');
+    const section = document.querySelector('section');
+
+    function showFile(e){
+        console.log(e)
+        reader =  new FileReader(e.target.files[0])
+
+        reader.readAsText(e.target.files[0]);
+
+        reader.onloadend = function() {
+            console.log(reader.result);
+            let obj = JSON.parse(reader.result)
+            console.log(obj)
+            populateHeader(obj)
+        };
+
+    }
+    function populateHeader(obj){
+        var myH1;
+        myH1 = document.getElementsByTagName('h1')
+        if (myH1.length != 0){
+            myH1[0].remove()
+        }
+        myH1 = document.createElement('h1');
+        myH1.textContent = obj['name']
+        header.appendChild(myH1);
+
+    }
+
+
+    //     for (var i = 0; i < heroes.length; i++) {
+    //         var myArticle = document.createElement('article');
+    //         var myH2 = document.createElement('h2');
+    //         var myPara1 = document.createElement('p');
+    //         var myPara2 = document.createElement('p');
+    //         var myPara3 = document.createElement('p');
+    //         var myList = document.createElement('ul');
+    //
+    //         myH2.textContent = heroes[i].name;
+    //         myPara1.textContent = 'Secret identity: ' + heroes[i].secretIdentity;
+    //         myPara2.textContent = 'Age: ' + heroes[i].age;
+    //         myPara3.textContent = 'Superpowers:';
+    //
+    //         var superPowers = heroes[i].powers;
+    //         for (var j = 0; j < superPowers.length; j++) {
+    //             var listItem = document.createElement('li');
+    //             listItem.textContent = superPowers[j];
+    //             myList.appendChild(listItem);
+    //         }
+    //
+    //         myArticle.appendChild(myH2);
+    //         myArticle.appendChild(myPara1);
+    //         myArticle.appendChild(myPara2);
+    //         myArticle.appendChild(myPara3);
+    //         myArticle.appendChild(myList);
+    //
+    //         section.appendChild(myArticle);
+    //     }
+    // }
+</script>
+</body>
+</html>
