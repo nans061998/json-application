@@ -40,6 +40,7 @@
             let obj = JSON.parse(reader.result)
             console.log(obj)
             populateHeader(obj)
+            showForm(obj)
         };
 
     }
@@ -55,6 +56,23 @@
 
     }
 
+    function showForm(obj){
+        Object.keys(obj).forEach(element => {
+            let jsonObj = obj[element];
+            Object.keys(jsonObj).forEach(element => {
+                // console.log(jsonObj[element])
+                let arr = jsonObj[element]
+                Object.keys(arr).forEach(element => {
+                    console.log(element, arr[element])
+                    if (element = "label"){
+                        e = document.createElement("label")
+                        e.textContent = arr[element]
+                        header.appendChild(e)
+                    }
+                })
+            })
+        })
+    }
 
     //     for (var i = 0; i < heroes.length; i++) {
     //         var myArticle = document.createElement('article');
