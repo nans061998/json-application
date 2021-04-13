@@ -16,9 +16,10 @@
 <section>
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
-                <input type="file" accept="application/json" onchange="showFile(event)">
-                <button>Сбросить</button>
+            <div class="manu col-md-12">
+                <div class="col-md-6">
+                    <input class="form-control" type="file" accept="application/json" onchange="showFile(event)">
+                </div>
             </div>
         </div>
     </div>
@@ -28,6 +29,7 @@
 <script>
     const header = document.querySelector('header');
     const section = document.querySelector('section');
+    const menu = document.querySelector('menu');
 
     function showFile(e){
         console.log(e)
@@ -60,16 +62,31 @@
         Object.keys(obj).forEach(element => {
             let jsonObj = obj[element];
             Object.keys(jsonObj).forEach(element => {
-                // console.log(jsonObj[element])
-                let arr = jsonObj[element]
-                Object.keys(arr).forEach(element => {
-                    console.log(element, arr[element])
-                    if (element = "label"){
-                        e = document.createElement("label")
-                        e.textContent = arr[element]
-                        header.appendChild(e)
+                 console.log(jsonObj[element])
+                if(jsonObj[element].input != undefined) {
+                    var p = document.createElement("p");
+                    if(jsonObj[element].label != undefined) {
+                        p.innerHTML = jsonObj[element].label + "&nbsp;";
                     }
-                })
+                    var n = document.createElement("input");
+                    n.type = jsonObj[element].input.type;
+                    n.required = ((jsonObj[element].input.required == undefined || !jsonObj[element].input.required) ? false : true);
+                    p.appendChild(n)
+                    document.body.appendChild(p)
+                }
+                // let arr = jsonObj[element]
+                // Object.keys(arr).forEach(element => {
+                //     console.log(element, arr[element])
+                //     if (element = "label"){
+                //         e = document.createElement("label")
+                //         e.textContent = arr[element]
+                //         console.log(e)
+                //         section.appendChild(e)
+                //     }
+                //     else {
+                //         console.log(element)
+                //     }
+                // })
             })
         })
     }
