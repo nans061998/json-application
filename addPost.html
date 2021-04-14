@@ -9,21 +9,19 @@
 <body>
     <div class="input_wrapper">
         <input name="file" type="file" id="input_file" class="file" accept="application/json" onchange="showFile(event)"/>
-<!--        <label for="input_file">-->
-<!--            <span class="input_file-button-text">Выберите файл</span>-->
-<!--        </label>-->
     </div>
-    <form class="form">
-        <div class="form_title"></div>
+<!--    <form class="form">        -->
         <div class="form_group">
-<!--            <div class="form_label" for="form_input"></div>-->
-<!--            <div class="form_input" id="form_input"></div>-->
+            <div class="form_title"></div>
+            <div class="form_label" for="form_input"></div>
+            <div class="form_input" id="form_input"></div>
+            <div class="for_button"></div>
         </div>
-        <div class="for_button"></div>
-    </form>
+<!--    </form>-->
 </body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="jquery.maskedinput.min.js"></script>
 <script>
-    const body = document.querySelector('body');
     const form = document.querySelector('.form_group');
     const title = document.querySelector('.form_title');
     const button = document.querySelector('.for_button')
@@ -44,8 +42,10 @@
         };
 
     }
+
+
     function populateHeader(obj){
-        var myH1;
+        let myH1;
         myH1 = document.getElementsByTagName('h1')
         if (myH1.length != 0){
             myH1[0].remove()
@@ -57,22 +57,34 @@
     }
 
     function showForm(obj){
+
         Object.keys(obj).forEach(element => {
             let jsonObj = obj[element];
             Object.keys(jsonObj).forEach(element => {
                 console.log(jsonObj[element])
                 if(jsonObj[element].input != undefined) {
-                    var p = document.createElement("label");
+                    let p = document.createElement("label");
                     if(jsonObj[element].label != undefined) {
                         p.className = "form-label"
                         p.innerHTML = jsonObj[element].label + "&nbsp;";
+                        form.appendChild(p)
                     }
-                    var n = document.createElement("input");
+                    let n = document.createElement("input");
                     n.className = "form-input"
                     n.type = jsonObj[element].input.type;
+                    if (jsonObj[element].input.type == "technology"){
+                        let s
+                        s = document.createElement("select")
+                        s.className = "form-input"
+                        s.options = jsonObj[element].input.technologies
+                        s.multiple = jsonObj[element].input.multiple
+                        form.appendChild(s)
+                    }
                     n.required = ((jsonObj[element].input.required == undefined || !jsonObj[element].input.required) ? false : true);
-                    n.placeholder = ((jsonObj[element].input.placeholder == undefined || !jsonObj[element].input.placeholder) ? false : jsonObj[element].input.placeholder)
-                    form.appendChild(p)
+                    n.placeholder = ((jsonObj[element].input.placeholder == undefined || !jsonObj[element].input.placeholder) ? jsonObj[element].input.placeholder = '' : jsonObj[element].input.placeholder)
+                    // n.mask = ((jsonObj[element].input.mask == undefined || !jsonObj[element].input.mask) ? jsonObj[element].input.mask = '' : $('#n').mask(jsonObj[element].input.mask))
+
+
                     form.appendChild(n)
                 }
             })
@@ -81,19 +93,9 @@
 
     function buttonShow(obj){
         Object.keys(obj).forEach(element => {
-            console.log(obj[element])
             if (element = "buttons"){
-                let jsonObj = obj[element]
-
-                // Object.keys(jsonObj).forEach(element => {
-                //     console.log(jsonObj[element].text)
-                //     if (jsonObj[element].text != undefined){
-                //         let myButton = document.createElement("button")
-                //         myButton.textContent = jsonObj[element].text
-                //         myButton.className = "form_button"
-                //         button.appendChild(myButton)
-                //     }
-                // })
+                console.log(obj.buttons)
+                // console.log(obj[element])
             }
         })
       // Object.keys(obj).forEach(element => {

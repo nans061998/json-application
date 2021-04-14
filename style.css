@@ -10,17 +10,17 @@ body{
     margin: 0 0 32px 0;
 
 }
-.form{
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-    width: 800px;
-    padding: 32px;
-    border-radius: 10px;
-    box-shadow: 0 4px 16px #ccc;
-    font-family: sans-serif;
-    letter-spacing: 1px;
-}
+/*.form{*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    margin: auto;*/
+/*    width: 800px;*/
+/*    padding: 32px;*/
+/*    border-radius: 10px;*/
+/*    box-shadow: 0 4px 16px #ccc;*/
+/*    font-family: sans-serif;*/
+/*    letter-spacing: 1px;*/
+/*}*/
 
 
 
@@ -37,6 +37,12 @@ body{
 }
 
 .form_group{
+    width: 800px;
+    padding: 32px;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px #ccc;
+    font-family: sans-serif;
+    letter-spacing: 1px;
     margin-bottom: 32px;
     display: flex;
     justify-content: flex-start;
