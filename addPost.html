@@ -1,63 +1,114 @@
 <!doctype html>
 <html lang="ru">
 <head>
-    <!-- Обязательные метатеги -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="./style.css">
     <title>App JSON</title>
 </head>
 <body>
-    <div class="container">
-        <div class="py-5 text-center">
-            <h2>Add post</h2>
-        </div>
-        <div class="col-md-12 order-md-1">
-            <form class="needs-validation" novalidate>
-                <div class="row">
-                    <div class="col-md-12 mb-3">
-                        <label for="title">Title</label>
-                        <input type="text" class="form-control" id="title" placeholder="" value="" required>
-                        <div class="invalid-feedback">
-                            Title is required.
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12 mb-3">
-                        <label for="description">Description</label>
-                        <textarea rows="3" class="form-control" id="description" placeholder="" value="" required></textarea>
-                        <div class="invalid-feedback">
-                            Description is required.
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="date">Publish Date</label>
-                        <input type="date"  class="form-control" id="date" placeholder="" value="" required></input>
-                        <div class="invalid-feedback">
-                            Valid date is required.
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="author">Author</label>
-                        <input type="text"  class="form-control" id="author" placeholder="" value=""></input>
-                    </div>
-                </div>
-                <hr class="mb-4">
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="author_post">
-                    <label class="custom-control-label" for="author_post">View Author Post</label>
-                </div>
-
-                <hr class="mb-4">
-                <button class="btn btn-primary btn-lg btn-block" type="submit">Create Post</button>
-            </form>
-        </div>
+    <div class="input_wrapper">
+        <input name="file" type="file" id="input_file" class="file" accept="application/json" onchange="showFile(event)"/>
+<!--        <label for="input_file">-->
+<!--            <span class="input_file-button-text">Выберите файл</span>-->
+<!--        </label>-->
     </div>
+    <form class="form">
+        <div class="form_title"></div>
+        <div class="form_group">
+<!--            <div class="form_label" for="form_input"></div>-->
+<!--            <div class="form_input" id="form_input"></div>-->
+        </div>
+        <div class="for_button"></div>
+    </form>
 </body>
+<script>
+    const body = document.querySelector('body');
+    const form = document.querySelector('.form_group');
+    const title = document.querySelector('.form_title');
+    const button = document.querySelector('.for_button')
+
+    function showFile(e){
+        console.log(e)
+        reader =  new FileReader(e.target.files[0])
+
+        reader.readAsText(e.target.files[0]);
+
+        reader.onloadend = function() {
+            console.log(reader.result);
+            let obj = JSON.parse(reader.result)
+            console.log(obj)
+            populateHeader(obj)
+            showForm(obj)
+            buttonShow(obj)
+        };
+
+    }
+    function populateHeader(obj){
+        var myH1;
+        myH1 = document.getElementsByTagName('h1')
+        if (myH1.length != 0){
+            myH1[0].remove()
+        }
+        myH1 = document.createElement('h1');
+        myH1.textContent = obj['name']
+        title.appendChild(myH1);
+
+    }
+
+    function showForm(obj){
+        Object.keys(obj).forEach(element => {
+            let jsonObj = obj[element];
+            Object.keys(jsonObj).forEach(element => {
+                console.log(jsonObj[element])
+                if(jsonObj[element].input != undefined) {
+                    var p = document.createElement("label");
+                    if(jsonObj[element].label != undefined) {
+                        p.className = "form-label"
+                        p.innerHTML = jsonObj[element].label + "&nbsp;";
+                    }
+                    var n = document.createElement("input");
+                    n.className = "form-input"
+                    n.type = jsonObj[element].input.type;
+                    n.required = ((jsonObj[element].input.required == undefined || !jsonObj[element].input.required) ? false : true);
+                    n.placeholder = ((jsonObj[element].input.placeholder == undefined || !jsonObj[element].input.placeholder) ? false : jsonObj[element].input.placeholder)
+                    form.appendChild(p)
+                    form.appendChild(n)
+                }
+            })
+        })
+    }
+
+    function buttonShow(obj){
+        Object.keys(obj).forEach(element => {
+            console.log(obj[element])
+            if (element = "buttons"){
+                let jsonObj = obj[element]
+
+                // Object.keys(jsonObj).forEach(element => {
+                //     console.log(jsonObj[element].text)
+                //     if (jsonObj[element].text != undefined){
+                //         let myButton = document.createElement("button")
+                //         myButton.textContent = jsonObj[element].text
+                //         myButton.className = "form_button"
+                //         button.appendChild(myButton)
+                //     }
+                // })
+            }
+        })
+      // Object.keys(obj).forEach(element => {
+      //     let jsonObj = obj[element]
+      //     Object.keys(jsonObj).forEach(element => {
+      //         console.log(jsonObj[element].text)
+      //         if (jsonObj[element].text != undefined){
+      //             let myButton = document.createElement("button")
+      //             myButton.textContent = jsonObj[element].text
+      //             myButton.className = "form_button"
+      //             button.appendChild(myButton)
+      //         }
+      //     })
+      // })
+    }
+
+</script>
 </html>

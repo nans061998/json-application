@@ -8,28 +8,24 @@
 </head>
 
 <body>
-
-<header>
-
-</header>
-
-<section>
     <div class="container">
+        <div class="py-5 text-center">
+            <input class="form-control" type="file" accept="application/json" onchange="showFile(event)">
+        </div>
         <div class="row">
-            <div class="manu col-md-12">
-                <div class="col-md-6">
-                    <input class="form-control" type="file" accept="application/json" onchange="showFile(event)">
-                </div>
+            <div class="title col-md-12 text-center">
+            </div>
+        </div>
+        <div class="row">
+            <div class="form col-md-12">
             </div>
         </div>
     </div>
-
-</section>
-
+</body>
 <script>
-    const header = document.querySelector('header');
-    const section = document.querySelector('section');
-    const menu = document.querySelector('menu');
+    const body = document.querySelector('body');
+    const form = document.querySelector('.form');
+    const title = document.querySelector('.title');
 
     function showFile(e){
         console.log(e)
@@ -54,7 +50,7 @@
         }
         myH1 = document.createElement('h1');
         myH1.textContent = obj['name']
-        header.appendChild(myH1);
+        title.appendChild(myH1);
 
     }
 
@@ -62,31 +58,19 @@
         Object.keys(obj).forEach(element => {
             let jsonObj = obj[element];
             Object.keys(jsonObj).forEach(element => {
-                 console.log(jsonObj[element])
+                console.log(jsonObj[element])
                 if(jsonObj[element].input != undefined) {
                     var p = document.createElement("p");
                     if(jsonObj[element].label != undefined) {
                         p.innerHTML = jsonObj[element].label + "&nbsp;";
                     }
                     var n = document.createElement("input");
+                    n.className = "form-control col-md-12"
                     n.type = jsonObj[element].input.type;
                     n.required = ((jsonObj[element].input.required == undefined || !jsonObj[element].input.required) ? false : true);
                     p.appendChild(n)
-                    document.body.appendChild(p)
+                    form.appendChild(p)
                 }
-                // let arr = jsonObj[element]
-                // Object.keys(arr).forEach(element => {
-                //     console.log(element, arr[element])
-                //     if (element = "label"){
-                //         e = document.createElement("label")
-                //         e.textContent = arr[element]
-                //         console.log(e)
-                //         section.appendChild(e)
-                //     }
-                //     else {
-                //         console.log(element)
-                //     }
-                // })
             })
         })
     }
@@ -121,5 +105,4 @@
     //     }
     // }
 </script>
-</body>
 </html>
