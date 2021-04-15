@@ -8,23 +8,18 @@
 </head>
 <body>
     <div class="input_wrapper">
-        <input name="file" type="file" id="input_file" class="file" accept="application/json" onchange="showFile(event)"/>
+        <label for="myfile" class="label_file">Выберите файлы</label>
+        <input name="file" type="file" id="myfile" class="my" accept="application/json" onchange="showFile(event)"/>
+        <button class="delete" onclick="deleteForm()">Сбросить</button>
     </div>
-<!--    <form class="form">        -->
-        <div class="form_group">
-            <div class="form_title"></div>
-            <div class="form_label" for="form_input"></div>
-            <div class="form_input" id="form_input"></div>
-            <div class="for_button"></div>
-        </div>
-<!--    </form>-->
+    <div class="formGroup"></div>
 </body>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="jquery.maskedinput.min.js"></script>
+
 <script>
     const form = document.querySelector('.form_group');
     const title = document.querySelector('.form_title');
     const button = document.querySelector('.for_button')
+    const body = document.querySelector('.formGroup')
 
     function showFile(e){
         console.log(e)
@@ -36,60 +31,64 @@
             console.log(reader.result);
             let obj = JSON.parse(reader.result)
             console.log(obj)
-            populateHeader(obj)
-            showForm(obj)
-            buttonShow(obj)
+            formGorup(obj)
+            // buttonShow(obj)
+
         };
 
     }
 
-
-    function populateHeader(obj){
-        let myH1;
-        myH1 = document.getElementsByTagName('h1')
-        if (myH1.length != 0){
-            myH1[0].remove()
+    function formGorup(obj){
+        let myForm, myH1;
+        myForm = document.getElementsByTagName('form')
+        if (myForm.length != 0){
+            myForm[0].remove()
         }
+        myForm = document.createElement('form');
+        myForm.className = "form-group"
+        body.appendChild(myForm);
+
         myH1 = document.createElement('h1');
         myH1.textContent = obj['name']
-        title.appendChild(myH1);
-
-    }
-
-    function showForm(obj){
+        myForm.appendChild(myH1);
 
         Object.keys(obj).forEach(element => {
             let jsonObj = obj[element];
             Object.keys(jsonObj).forEach(element => {
                 console.log(jsonObj[element])
-                if(jsonObj[element].input != undefined) {
+                if (jsonObj[element].input != undefined) {
                     let p = document.createElement("label");
-                    if(jsonObj[element].label != undefined) {
+                    if (jsonObj[element].label != undefined) {
                         p.className = "form-label"
                         p.innerHTML = jsonObj[element].label + "&nbsp;";
-                        form.appendChild(p)
+                        myForm.appendChild(p)
                     }
                     let n = document.createElement("input");
                     n.className = "form-input"
                     n.type = jsonObj[element].input.type;
-                    if (jsonObj[element].input.type == "technology"){
+                    if (jsonObj[element].input.type == "technology") {
                         let s
                         s = document.createElement("select")
                         s.className = "form-input"
                         s.options = jsonObj[element].input.technologies
                         s.multiple = jsonObj[element].input.multiple
-                        form.appendChild(s)
+                        myForm.appendChild(s)
                     }
                     n.required = ((jsonObj[element].input.required == undefined || !jsonObj[element].input.required) ? false : true);
                     n.placeholder = ((jsonObj[element].input.placeholder == undefined || !jsonObj[element].input.placeholder) ? jsonObj[element].input.placeholder = '' : jsonObj[element].input.placeholder)
                     // n.mask = ((jsonObj[element].input.mask == undefined || !jsonObj[element].input.mask) ? jsonObj[element].input.mask = '' : $('#n').mask(jsonObj[element].input.mask))
-
-
-                    form.appendChild(n)
+                    myForm.appendChild(n)
                 }
             })
         })
     }
+
+    function deleteForm(){
+        let myForm;
+        myForm = document.getElementsByTagName('form')
+        myForm[0].remove()
+    }
+
 
     function buttonShow(obj){
         Object.keys(obj).forEach(element => {

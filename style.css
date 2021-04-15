@@ -6,37 +6,76 @@ body{
     /*height: 100vh;*/
 }
 
-.file{
-    margin: 0 0 32px 0;
 
+.input_wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
-/*.form{*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*    margin: auto;*/
-/*    width: 800px;*/
-/*    padding: 32px;*/
-/*    border-radius: 10px;*/
-/*    box-shadow: 0 4px 16px #ccc;*/
-/*    font-family: sans-serif;*/
-/*    letter-spacing: 1px;*/
-/*}*/
 
+.my{
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
 
-
-.form_button{
+.label_file{
+    text-align: center;
+    display: block;
     font-family: sans-serif;
     letter-spacing: 1px;
     font-size: 16px;
+    margin-bottom: 0px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    background-color: #0071f0;
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-right: 10px;
 }
 
-.form_title{
-    text-align: center;
+.label_file:hover{
+    background-color: rgba(0, 113, 240, 0.7);
+}
+
+.delete{
+    font-family: sans-serif;
+    letter-spacing: 1px;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    background-color: #f00000;
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.delete:focus,
+.delete:hover{
+    background-color: rgba(255, 9, 50, 0.7);
+}
+
+.h1{
     margin: 0 0 32px 0;
     font-weight: normal;
 }
 
-.form_group{
+.formGroup{
+    display: flex;
+    justify-content: center;
+}
+
+form{
     width: 800px;
     padding: 32px;
     border-radius: 10px;
@@ -53,6 +92,10 @@ label{
     color: #6f6b6b;
     margin-bottom: 10px;
 }
+input[type="file"]{
+    padding: 0 0 0 0;
+    margin-bottom: 0px;
+}
 
 input{
     width: 100%;
@@ -64,6 +107,7 @@ input{
     outline: none;
 }
 
+
 input[type="checkbox"]{
     width: 2%;
     margin-bottom: 15px;
@@ -71,7 +115,7 @@ input[type="checkbox"]{
 }
 
 
-.form_input:focus{
+input:focus{
     border-bottom: 1px solid #1a73a8;
 }
 
