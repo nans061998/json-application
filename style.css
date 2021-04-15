@@ -73,9 +73,14 @@ body{
 .formGroup{
     display: flex;
     justify-content: center;
+    max-width: 800px;
+    width: 100%;
 }
 
 form{
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
     width: 800px;
     padding: 32px;
     border-radius: 10px;
@@ -83,9 +88,6 @@ form{
     font-family: sans-serif;
     letter-spacing: 1px;
     margin-bottom: 32px;
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
 }
 
 label{
