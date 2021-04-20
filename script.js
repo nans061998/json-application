@@ -71,7 +71,7 @@ function formGorup(obj){
                                     n.type = "text"
                                     n.className = "mask"
                                     let mask = jsonObj[element].input.mask
-                                    n.pattern = "^" + mask.replace(/9/g,"[0-9]") + "$"
+                                    n.pattern = "^" + mask.replace(/9/g,"[0-9]").replace(/\+/,"[+]").replace(/\(/,"[(]").replace(/[)]/,"[)]") + "$"
                                     n.placeholder = jsonObj[element].input.mask
                                 }
                                 myForm.appendChild(n)
