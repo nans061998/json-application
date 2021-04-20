@@ -13,7 +13,6 @@ function showFile(e){
         formGorup(obj)
 
     };
-
 }
 
 function formGorup(obj){
