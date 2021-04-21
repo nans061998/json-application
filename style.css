@@ -127,13 +127,13 @@ input:focus{
     color: red
 }
 
-.myDiv{
+.div_references{
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
 }
 
-.myDiv > button {
+.div_references > button {
     margin-right: 10px;
 }
 

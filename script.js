@@ -1,33 +1,31 @@
 const body = document.querySelector('.formGroup')
 
-function showFile(e){
+function show_file(e){
     console.log(e)
-    reader =  new FileReader(e.target.files[0])
+    let reader =  new FileReader(e.target.files[0])
 
     reader.readAsText(e.target.files[0]);
 
     reader.onloadend = function() {
         console.log(reader.result);
         let obj = JSON.parse(reader.result)
-        console.log(obj)
-        formGorup(obj)
-
+        create_form(obj)
     };
 }
 
-function formGorup(obj){
-    let myForm, myH1;
-    myForm = document.getElementsByTagName('form')
-    if (myForm.length != 0){
-        myForm[0].remove()
+function create_form(obj){
+    let form, title;
+    form = document.getElementsByTagName('form')
+    if (form.length != 0){
+        form[0].remove()
     }
-    myForm = document.createElement('form');
-    myForm.className = "form-group"
-    body.appendChild(myForm);
+    form = document.createElement('form');
+    form.className = "form-group"
+    body.appendChild(form);
 
-    myH1 = document.createElement('h1');
-    myH1.textContent = obj['name']
-    myForm.appendChild(myH1);
+    title = document.createElement('h1');
+    title.textContent = obj['name']
+    form.appendChild(title);
 
     Object.keys(obj).forEach(element => {
 
@@ -38,93 +36,110 @@ function formGorup(obj){
                     console.log(obj[element])
                     Object.keys(jsonObj).forEach(element => {
                         if(jsonObj[element].input != undefined){
-                            let p = document.createElement("label");
+                            let fields_container = document.createElement("label");
                             if (jsonObj[element].label != undefined){
-                                p.className = "form-label"
-                                p.innerHTML = jsonObj[element].label + "&nbsp;";
-                                myForm.appendChild(p)
+                                fields_container.className = "form-label"
+                                fields_container.innerHTML = jsonObj[element].label + "&nbsp;";
+                                form.appendChild(fields_container)
                             }
-                            let n
+                            let input
                             if (jsonObj[element].input.type == "textarea"){
-                                let t
-                                t = document.createElement("textarea")
-                                t.rows = 10
-                                myForm.appendChild(t)
+                                let textarea
+                                textarea = document.createElement("textarea")
+                                textarea.rows = 10
+                                form.appendChild(textarea)
                             } else if(jsonObj[element].input.technologies instanceof Array){
-                                let s
-                                s = document.createElement("select")
+                                let div_checkbox
+                                div_checkbox = document.createElement("div")
                                 jsonObj[element].input.technologies.forEach(element => {
-                                    let o = document.createElement("option")
-                                    o.value = o.innerText = element
-                                    s.appendChild(o)
+                                    let checkbox = document.createElement("input")
+                                    checkbox.type = "checkbox"
+                                    let label = document.createElement("label")
+                                    label.textContent = label.innerText = element
+                                    label.appendChild(checkbox)
+                                    div_checkbox.appendChild(label)
                                 })
-                                s.multiple = jsonObj[element].input.multiple
-                                myForm.appendChild(s)
+                                form.appendChild(div_checkbox)
                             } else {
-                                n = document.createElement("input");
-                                n.className = "form-input"
-                                n.type = jsonObj[element].input.type;
-                                n.required = ((jsonObj[element].input.required == undefined || !jsonObj[element].input.required) ? false : true);
-                                n.placeholder = ((jsonObj[element].input.placeholder == undefined || !jsonObj[element].input.placeholder) ? jsonObj[element].input.placeholder = '' : jsonObj[element].input.placeholder)
-                                n.accept ="image/jpeg,image/png,application/pdf"
+                                input = document.createElement("input");
+                                input.className = "form-input"
+                                input.type = jsonObj[element].input.type;
+                                input.required = ((jsonObj[element].input.required == undefined || !jsonObj[element].input.required) ? false : true);
+                                input.placeholder = ((jsonObj[element].input.placeholder == undefined || !jsonObj[element].input.placeholder) ? jsonObj[element].input.placeholder = '' : jsonObj[element].input.placeholder)
+                                input.accept ="image/jpeg,image/png,application/pdf"
                                 if (jsonObj[element].input.mask != undefined){
-                                    n.type = "text"
-                                    n.className = "mask"
+                                    input.type = "text"
+                                    input.className = "mask"
                                     let mask = jsonObj[element].input.mask
-                                    n.pattern = "^" + mask.replace(/9/g,"[0-9]").replace(/\+/,"[+]").replace(/\(/,"[(]").replace(/[)]/,"[)]") + "$"
-                                    n.placeholder = jsonObj[element].input.mask
+                                    input.pattern = "^" + mask.replace(/9/g,"[0-9]").replace(/\+/,"[+]").replace(/\(/,"[(]").replace(/[)]/,"[)]") + "$"
+                                    input.placeholder = jsonObj[element].input.mask
                                 }
-                                myForm.appendChild(n)
+                                form.appendChild(input)
                             }
                         }
 
                     })
                     break;
                 case "references":
-                    let wrapper = document.createElement("div")
-                    wrapper.className = "myDiv"
+                    let div_references = document.createElement("div")
+                    div_references.className = "div_references"
                     Object.keys(jsonObj).forEach(element => {
                         if(jsonObj[element].input != undefined){
-                            let myCheckbox = document.createElement("input")
-                            myCheckbox.type = jsonObj[element].input.type
-                            myCheckbox.checked = jsonObj[element].input.checked
-                            myCheckbox.required = jsonObj[element].input.required
-                            wrapper.appendChild(myCheckbox)
+                            let checkbox = document.createElement("input")
+                            checkbox.type = jsonObj[element].input.type
+                            checkbox.checked = jsonObj[element].input.checked
+                            checkbox.required = jsonObj[element].input.required
+                            div_references.appendChild(checkbox)
                         }
                         if (jsonObj[element]["text without ref"] != undefined){
-                            let myText = document.createElement("label")
-                            myText.textContent = jsonObj[element]["text without ref"]
-                            wrapper.appendChild(myText)
+                            let label = document.createElement("label")
+                            label.textContent = jsonObj[element]["text without ref"]
+                            div_references.appendChild(label)
                         }
                         if (jsonObj[element]["text"] != undefined){
-                            let myRef = document.createElement("a")
-                            myRef.textContent = jsonObj[element]["text"]
-                            myRef.setAttribute('href', jsonObj[element]["ref"])
-                            wrapper.appendChild(myRef)
+                            let ref = document.createElement("a")
+                            ref.textContent = jsonObj[element]["text"]
+                            ref.setAttribute('href', jsonObj[element]["ref"])
+                            div_references.appendChild(ref)
                         }
-                        myForm.appendChild(wrapper)
+                        form.appendChild(div_references)
 
                     })
                     break;
                 case "buttons":
-                    let myDiv = document.createElement("div")
-                    myDiv.className = "myDiv"
-                    Object.keys(jsonObj).forEach(element => {
-                        if (jsonObj[element].text != undefined){
-                            let myButton = document.createElement("button")
-                            myButton.textContent = jsonObj[element].text
-                            myButton.className = "form_button"
-                            myDiv.appendChild(myButton)
-                            myForm.appendChild(myDiv)
-                        }
-                    })
+                    console.log(create_buttons(jsonObj))
+                    // let myDiv = document.createElement("div")
+                    // myDiv.className = "myDiv"
+                    // Object.keys(jsonObj).forEach(element => {
+                    //     if (jsonObj[element].text != undefined){
+                    //         let myButton = document.createElement("button")
+                    //         myButton.textContent = jsonObj[element].text
+                    //         myButton.className = "form_button"
+                    //         myDiv.appendChild(myButton)
+                    //         myForm.appendChild(myDiv)
+                    //     }
+                    // })
             }
         }
     })
 }
 
-function deleteForm(){
-    let myForm;
-    myForm = document.getElementsByTagName('form')
-    myForm[0].remove()
+
+function delete_form(){
+    let form;
+    form = document.getElementsByTagName('form')
+    form[0].remove()
+}
+
+function create_buttons(jsonObj){
+    let div_buttons = document.createElement("div")
+    div_buttons.className = "div_references"
+    Object.keys(jsonObj).forEach(element => {
+        if (jsonObj[element].text != undefined){
+            let button = document.createElement("button")
+            button.textContent = jsonObj[element].text
+            button.className = "form_button"
+            return div_buttons.appendChild(button)
+        }
+    })
 }
