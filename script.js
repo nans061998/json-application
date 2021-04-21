@@ -51,9 +51,8 @@ function create_form(obj){
                     }
                     break;
                 case "buttons":
-                    if (create_buttons(jsonObj) != undefined){
-                        form.appendChild(create_buttons(jsonObj));
-                    }
+                    console.log(create_buttons(jsonObj))
+                    form.appendChild(create_buttons(jsonObj));
                     break
             }
         }
@@ -144,20 +143,18 @@ function create_references(param){
 }
 
 function create_buttons(param){
-    if (param.length != 0){
-        let div_buttons = document.createElement("div")
-        div_buttons.className = "div_references"
-        param.forEach(element => {
-            if (element.text != undefined){
-                let button = document.createElement("button")
-                button.textContent = element.text
-                button.className = "form_button"
-            }
-        })
-        return div_buttons
-    } else {
-        return undefined
-    }
+    let div_buttons = document.createElement("div")
+    div_buttons.className = "div_references"
+    param.forEach(element => {
+        if (element.text != undefined){
+            let button = document.createElement("button")
+            button.textContent = element.text
+            button.className = "form_button"
+            div_buttons.appendChild(button)
+        }
+    })
+    return div_buttons
+
 
 }
 
