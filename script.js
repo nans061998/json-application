@@ -28,97 +28,33 @@ function create_form(obj){
     form.appendChild(title);
 
     Object.keys(obj).forEach(element => {
-
         if(obj[element] instanceof Object) {
             let jsonObj = obj[element]
             switch(element) {
                 case "fields":
-                    console.log(obj[element])
                     Object.keys(jsonObj).forEach(element => {
                         if(jsonObj[element].input != undefined){
-                            let fields_container = document.createElement("label");
-                            if (jsonObj[element].label != undefined){
-                                fields_container.className = "form-label"
-                                fields_container.innerHTML = jsonObj[element].label + "&nbsp;";
-                                form.appendChild(fields_container)
-                            }
-                            let input
+                            form.appendChild(create_fields_label(jsonObj, element))
                             if (jsonObj[element].input.type == "textarea"){
-                                let textarea
-                                textarea = document.createElement("textarea")
-                                textarea.rows = 10
-                                form.appendChild(textarea)
+                                form.appendChild(create_fields_textarea())
                             } else if(jsonObj[element].input.technologies instanceof Array){
-                                let div_checkbox
-                                div_checkbox = document.createElement("div")
-                                jsonObj[element].input.technologies.forEach(element => {
-                                    let checkbox = document.createElement("input")
-                                    checkbox.type = "checkbox"
-                                    let label = document.createElement("label")
-                                    label.textContent = label.innerText = element
-                                    label.appendChild(checkbox)
-                                    div_checkbox.appendChild(label)
-                                })
-                                form.appendChild(div_checkbox)
+                                form.appendChild(create_fields_checkbox(jsonObj, element))
                             } else {
-                                input = document.createElement("input");
-                                input.className = "form-input"
-                                input.type = jsonObj[element].input.type;
-                                input.required = ((jsonObj[element].input.required == undefined || !jsonObj[element].input.required) ? false : true);
-                                input.placeholder = ((jsonObj[element].input.placeholder == undefined || !jsonObj[element].input.placeholder) ? jsonObj[element].input.placeholder = '' : jsonObj[element].input.placeholder)
-                                input.accept ="image/jpeg,image/png,application/pdf"
-                                if (jsonObj[element].input.mask != undefined){
-                                    input.type = "text"
-                                    input.className = "mask"
-                                    let mask = jsonObj[element].input.mask
-                                    input.pattern = "^" + mask.replace(/9/g,"[0-9]").replace(/\+/,"[+]").replace(/\(/,"[(]").replace(/[)]/,"[)]") + "$"
-                                    input.placeholder = jsonObj[element].input.mask
-                                }
-                                form.appendChild(input)
+                                form.appendChild(create_fields_input(jsonObj,element))
                             }
                         }
-
                     })
                     break;
                 case "references":
-                    let div_references = document.createElement("div")
-                    div_references.className = "div_references"
-                    Object.keys(jsonObj).forEach(element => {
-                        if(jsonObj[element].input != undefined){
-                            let checkbox = document.createElement("input")
-                            checkbox.type = jsonObj[element].input.type
-                            checkbox.checked = jsonObj[element].input.checked
-                            checkbox.required = jsonObj[element].input.required
-                            div_references.appendChild(checkbox)
-                        }
-                        if (jsonObj[element]["text without ref"] != undefined){
-                            let label = document.createElement("label")
-                            label.textContent = jsonObj[element]["text without ref"]
-                            div_references.appendChild(label)
-                        }
-                        if (jsonObj[element]["text"] != undefined){
-                            let ref = document.createElement("a")
-                            ref.textContent = jsonObj[element]["text"]
-                            ref.setAttribute('href', jsonObj[element]["ref"])
-                            div_references.appendChild(ref)
-                        }
-                        form.appendChild(div_references)
-
-                    })
+                    if (create_references(jsonObj) != undefined){
+                        form.appendChild(create_references(jsonObj))
+                    }
                     break;
                 case "buttons":
-                    console.log(create_buttons(jsonObj))
-                    // let myDiv = document.createElement("div")
-                    // myDiv.className = "myDiv"
-                    // Object.keys(jsonObj).forEach(element => {
-                    //     if (jsonObj[element].text != undefined){
-                    //         let myButton = document.createElement("button")
-                    //         myButton.textContent = jsonObj[element].text
-                    //         myButton.className = "form_button"
-                    //         myDiv.appendChild(myButton)
-                    //         myForm.appendChild(myDiv)
-                    //     }
-                    // })
+                    if (create_buttons(jsonObj) != undefined){
+                        form.appendChild(create_buttons(jsonObj));
+                    }
+                    break
             }
         }
     })
@@ -131,15 +67,97 @@ function delete_form(){
     form[0].remove()
 }
 
-function create_buttons(jsonObj){
-    let div_buttons = document.createElement("div")
-    div_buttons.className = "div_references"
-    Object.keys(jsonObj).forEach(element => {
-        if (jsonObj[element].text != undefined){
-            let button = document.createElement("button")
-            button.textContent = jsonObj[element].text
-            button.className = "form_button"
-            return div_buttons.appendChild(button)
-        }
-    })
+function create_fields_label(param, temp){
+    let fields_container = document.createElement("label");
+    if (param[temp].label != undefined){
+        fields_container.className = "form-label"
+        fields_container.innerHTML = param[temp].label + "&nbsp;";
+    }
+    return fields_container
 }
+
+function create_fields_textarea(){
+    let textarea
+    textarea = document.createElement("textarea")
+    textarea.rows = 10
+    return textarea
+}
+
+function create_fields_checkbox(param, item){
+    let div_checkbox
+    div_checkbox = document.createElement("div")
+    param[item].input.technologies.forEach(item => {
+        let checkbox = document.createElement("input")
+        checkbox.type = "checkbox"
+        let label = document.createElement("label")
+        label.textContent = label.innerText = item
+        label.appendChild(checkbox)
+        div_checkbox.appendChild(label)
+    })
+    return div_checkbox
+}
+
+function create_fields_input(param, item){
+    let input
+    input = document.createElement("input");
+    input.className = "form-input"
+    input.type = param[item].input.type;
+    input.required = ((param[item].input.required == undefined || !param[item].input.required) ? false : true);
+    input.placeholder = ((param[item].input.placeholder == undefined || !param[item].input.placeholder) ? param[item].input.placeholder = '' : param[item].input.placeholder)
+    input.accept ="image/jpeg,image/png,application/pdf"
+    if (param[item].input.mask != undefined){
+        input.type = "text"
+        input.className = "mask"
+        let mask = param[item].input.mask
+        input.pattern = "^" + mask.replace(/9/g,"[0-9]").replace(/\+/,"[+]").replace(/\(/,"[(]").replace(/[)]/,"[)]") + "$"
+        input.placeholder = param[item].input.mask
+    }
+    return input
+}
+
+function create_references(param){
+    if (param.length != 0){
+        let div_references = document.createElement("div")
+        div_references.className = "div_references"
+        Object.keys(param).forEach(element => {
+            if(param[element].input != undefined){
+                let checkbox = document.createElement("input")
+                checkbox.type = param[element].input.type
+                checkbox.checked = param[element].input.checked
+                checkbox.required = param[element].input.required
+                div_references.appendChild(checkbox)
+            }
+            if (param[element]["text without ref"] != undefined){
+                let label = document.createElement("label")
+                label.textContent = param[element]["text without ref"]
+                div_references.appendChild(label)
+            }
+            if (param[element]["text"] != undefined){
+                let ref = document.createElement("a")
+                ref.textContent = param[element]["text"]
+                ref.setAttribute('href', param[element]["ref"])
+                div_references.appendChild(ref)
+            }
+        })
+        return div_references
+    } else{ return undefined}
+}
+
+function create_buttons(param){
+    if (param.length != 0){
+        let div_buttons = document.createElement("div")
+        div_buttons.className = "div_references"
+        param.forEach(element => {
+            if (element.text != undefined){
+                let button = document.createElement("button")
+                button.textContent = element.text
+                button.className = "form_button"
+            }
+        })
+        return div_buttons
+    } else {
+        return undefined
+    }
+
+}
+
